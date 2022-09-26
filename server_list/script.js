@@ -9,9 +9,12 @@ servers = [
     // "http://68.9.117.73:3034/",
     // "http://68.9.117.73:3035/",
     // "http://localhost:3030/",
-    // "http://localhost:3031/",
+    "http://localhost:3031/",
+    "http://localhost:20056/",
     "http://localhost:20056/",
 ];
+
+const servers_grid = document.querySelector('#servers_grid')
 
 for (let idx = 0; idx < servers.length; idx++) {
     let server = document.createElement("div");
@@ -28,14 +31,36 @@ for (let idx = 0; idx < servers.length; idx++) {
     var xmlhttp = new XMLHttpRequest();
     var url = servers[idx] + "status.json";
 
+    const html2 = `
+                <div class="col-sm-4" id="server_${idx}">
+                    <div class="card text-center p-0" style="/*width: 18rem;*/">
+                        <img class="card-img-top" src="/images/maps/MapsImages_KingOfTheHill" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title"><strong id="map_name">Pending...</strong></h5>
+                            <div class="spinner-border" id="map_spinner"></div>
+                            <p class="card-text" id="map_description"></p>
+                            <hr />
+                            <div class="col-12">
+                                <small><strong class="text-danger">Mode:</strong> <span id="game_type">Pending...</span></small>
+                            </div>
+                            <div class="col-12">
+                                <small><strong class="text-danger">Players:</strong> <span id="game_players">0</span>/<span id="game_max_players">0</span></small>
+                            </div>
+                            <button class="btn btn-primary mt-3" id="game_join" disabled>Join Game</button>
+                        </div>
+                    </div>
+                </div>
+            `
 
-    const servers_grid = document.querySelector('#servers_grid')
+    servers_grid.insertAdjacentHTML('beforeend', html2)
+
+
 
     xmlhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             let status = JSON.parse(this.responseText);
-            console.log(status)
-            update(server, servers[idx] + "play", status);
+            // console.log(status)
+            update(server, servers[idx] + "play", status, idx);
 
             const html = `
                 <div class="col-sm-3" id="server_${idx}">
@@ -52,9 +77,30 @@ for (let idx = 0; idx < servers.length; idx++) {
                 </div>
             `
 
-            servers_grid.insertAdjacentHTML('beforeend', html)
+            // const html2 = `
+            //     <div class="col-sm-4" id="server_${idx}">
+            //         <div class="card text-center p-0" style="/*width: 18rem;*/">
+            //             <img class="card-img-top" src="/images/maps/MapsImages_KingOfTheHill" alt="Card image cap">
+            //             <div class="card-body">
+            //                 <h5 class="card-title"><strong>${status['name']}</strong></h5>
+            //                 <p class="card-text">${status['description']}</p>
+            //                 <hr />
+            //                 <div class="col-12">
+            //                     <small><strong class="text-danger">Mode:</strong> ${status['game_type']}</small>
+            //                 </div>
+            //                 <div class="col-12">
+            //                     <small><strong class="text-danger">Players:</strong> ${status['players']}/${status['maxPlayers']}</small>
+            //                 </div>
+            //                 <button class="btn btn-primary mt-3" onClick="window.location.href='${servers[idx]}play'">Join Game</button>
+            //             </div>
+            //         </div>
+            //     </div>
+            // `
+            //
+            // servers_grid.insertAdjacentHTML('beforeend', html2)
 
         } else if (this.readyState == 4 && this.status == 0) {
+            // console.log('offline')
             offline(server, servers[idx]);
         }
     };
@@ -64,7 +110,22 @@ for (let idx = 0; idx < servers.length; idx++) {
     document.querySelector('#servers_grid')
 }
 
-function update(server, address, status) {
+function update(server, address, status, server_id) {
+
+    const map = document.querySelector(`#server_${server_id}`)
+
+    // Set map data
+    map.querySelector('#map_spinner').remove()
+    map.querySelector('#map_name').innerText = status['name']
+    map.querySelector('#map_description').innerText = status['description']
+    map.querySelector('#game_type').innerText = status['game_type']
+    map.querySelector('#game_players').innerText = status['players']
+    map.querySelector('#game_max_players').innerText = status['maxPlayers']
+    map.querySelector('#game_join').removeAttribute('disabled')
+    map.querySelector('#game_join').addEventListener('click', () => {
+        window.location.href = `${servers[server_id]}play`
+    })
+
 
     removePendingElement(server);
 

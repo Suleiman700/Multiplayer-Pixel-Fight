@@ -21,7 +21,7 @@ var loadStatus = 1;
 var playerClass = "scout";
 var reloadTime = 100;
 var playerSnowballCount = 20;
-
+let doingWeaponZoom = false // Weapon zoom
 
 init();
 animate();
@@ -68,13 +68,8 @@ function init() {
     var onClick = function (event) {
         // If right click
         if (event.which === 3) {
-            camera.fov = 10;
-            controls.speedFactor = 0.0004;
-            camera.updateProjectionMatrix();
+            handleWeaponZoom()
 
-            camera.fov = 75;
-            controls.speedFactor = 0.002;
-            camera.updateProjectionMatrix();
             return
         }
         if (loadStatus > 0.999 && controls.isLocked && playerSnowballCount > 0) {
@@ -463,6 +458,24 @@ function animate() {
     renderer.render(scene, camera);
 }
 
+// Handle weapon zoom
+function handleWeaponZoom() {
+    if (doingWeaponZoom) {
+        // Reset weapon zoom to default
+        camera.fov = 75;
+        controls.speedFactor = 0.002;
+        camera.updateProjectionMatrix();
+        doingWeaponZoom = false
+    }
+    else {
+        // Set weapon zoom
+        camera.fov = 20;
+        controls.speedFactor = 0.0004;
+        camera.updateProjectionMatrix();
+        doingWeaponZoom = true
+    }
+}
+
 var mAP = [[[]]];
 
 socket.on("map", function (map, colors) {
@@ -629,6 +642,26 @@ var projectiles = {};
 function drawPlayer(player) {
     var cylinderGeometry = new THREE.CylinderBufferGeometry(7.5, 7.5, 35, 10);
     cylinderGeometry = cylinderGeometry.toNonIndexed(); // ensure each face has unique vertices
+
+    // Ball shaped player
+    // const cylinderGeometry = new THREE.SphereGeometry( 15, 32, 16 );
+
+
+    // Model player
+    // const loader = new THREE.GLTFLoader();
+    // loader.load( '/player_egg', function ( gltf ) {
+    //     const sword = gltf.scene;  // sword 3D object is loaded
+    //     sword.scale.set(50, 50, 50);
+    //     // sword.position.y = 4;
+    //     scene.add(sword);
+    //
+    //     player.model = sword;
+    //
+    //     // scene.add( model );
+    //
+    // }, undefined, function ( error ) {
+    //     console.error( error );
+    // } );
 
     var material = new THREE.MeshLambertMaterial({color: player.color});
 

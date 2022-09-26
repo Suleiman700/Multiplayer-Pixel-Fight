@@ -57,11 +57,12 @@ fs.readFile(configFile, "utf-8", function (err, data) {
     } else {
         content = data.split("\n");
         port = 20056 //content[0];
-        SERVER_NAME = 'Small City' //content[1];
-        SERVER_DESCRIPTION = 'Free For All' //content[2];
-        MAPFILE = 'maps/teamsTown.json' //content[3];
-        MAPIMAGE = '/images/maps/smallCity'
-        ALLOWGAMERESTARTS = true;
+        SERVER_NAME = content[1];
+        SERVER_DESCRIPTION = content[2];
+        GAME_TYPE = content[3];
+        MAPFILE = content[4];
+        ALLOWGAMERESTARTS = content[5];
+        MAPIMAGE = content[6]; //'/images/maps/smallCity'
         // if(content[4] == "true"){
         //   ALLOWGAMERESTARTS = true;
         // }else{
@@ -148,18 +149,28 @@ app.get("/movements/jumps/cartoon_jump", function (req, res) {
     res.sendFile(__dirname + '/sounds/movements/jumps/cartoon_jump.mp3');
 });
 
-app.get("/images/maps/smallCity", function (req, res) {
-    res.sendFile(__dirname + '/images/maps/smallCity.jpg');
+app.get("/images/maps/:map_name", function (req, res) {
+    // console.log(req.path)
+
+    switch (req.params.map_name) {
+        case 'MapsImages_KingOfTheHill':
+            res.sendFile(__dirname + '/images/maps/kingOfTheHill.jpg');
+    }
 });
 
 app.get("/sounds/guns/bullet_hit", function (req, res) {
     res.sendFile(__dirname + '/sounds/guns/bullet_hit.mp3');
 });
 
+app.get("/player_egg", function (req, res) {
+    res.sendFile(__dirname + '/models/bambop.glb');
+});
+
 app.get("/status.json", function (req, res) {
     let status = {
         name: SERVER_NAME,
         description: SERVER_DESCRIPTION,
+        game_type: GAME_TYPE,
         players: players.length,
         maxPlayers: 999,
         image: MAPIMAGE,
