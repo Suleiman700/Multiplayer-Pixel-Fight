@@ -60,6 +60,7 @@ fs.readFile(configFile, "utf-8", function (err, data) {
         SERVER_NAME = 'Small City' //content[1];
         SERVER_DESCRIPTION = 'Free For All' //content[2];
         MAPFILE = 'maps/teamsTown.json' //content[3];
+        MAPIMAGE = '/images/maps/smallCity'
         ALLOWGAMERESTARTS = true;
         // if(content[4] == "true"){
         //   ALLOWGAMERESTARTS = true;
@@ -140,7 +141,19 @@ app.get("/", function (req, res) {
 });
 
 app.get("/bullet_sound", function (req, res) {
-    res.sendFile(__dirname + '/client/bullet.mp3');
+    res.sendFile(__dirname + '/sounds/guns/bullet.mp3');
+});
+
+app.get("/movements/jumps/cartoon_jump", function (req, res) {
+    res.sendFile(__dirname + '/sounds/movements/jumps/cartoon_jump.mp3');
+});
+
+app.get("/images/maps/smallCity", function (req, res) {
+    res.sendFile(__dirname + '/images/maps/smallCity.jpg');
+});
+
+app.get("/sounds/guns/bullet_hit", function (req, res) {
+    res.sendFile(__dirname + '/sounds/guns/bullet_hit.mp3');
 });
 
 app.get("/status.json", function (req, res) {
@@ -149,6 +162,8 @@ app.get("/status.json", function (req, res) {
         description: SERVER_DESCRIPTION,
         players: players.length,
         maxPlayers: 999,
+        image: MAPIMAGE,
+        test: 'test'
     };
     res.send(JSON.stringify(status));
 });
@@ -439,7 +454,7 @@ io.on("connection", function (socket) {
         events[gameType]["update leaderboard"]();
     });
 
-    socket.on("launch", function (angle) {
+    socket.on("launch", async function (angle) {
         if (player.snowballCount > 0) {
             player.snowballCount--;
             var p = getNewProjectile(player.class);
@@ -464,6 +479,12 @@ io.on("connection", function (socket) {
             if (p.position.x != NaN && p.position.y != NaN && p.position.z != NaN) {
                 projectiles.push(p);
                 moveProjectile(p);
+                // const bullet_did_hit_player = await moveProjectile(p);
+                // // If bullet hit player
+                // if (bullet_did_hit_player) {
+                //     // Play bullet hit sound to the shooter player
+                //     player.socket.emit("play bullet hit sound");
+                // }
             }
         }
     });
@@ -474,7 +495,11 @@ io.on("connection", function (socket) {
         }
     });
 
+    // Play bullet sound to all players in a room
     socket.on("play bullet sound", function (shooter_pos) {
+        /*
+            shooter_pos is the position of the player who shot the bullet (x, y, z)
+         */
         for (i in players) {
             players[i].socket.emit("play bullet sound", {
                 x: shooter_pos.x,
@@ -519,6 +544,7 @@ function tellEveryone(messageText) {
 function announceHit(hitPlayer, oPlayer) {
     hitPlayer.socket.emit("message", {from: "server", text: oPlayer.name + " hit you!"});
     oPlayer.socket.emit("message", {from: "server", text: "you hit " + hitPlayer.name + "!"});
+    oPlayer.socket.emit("play bullet hit sound"); // Play bullet hit sound to the shooter player
 }
 
 function flagReturned(player) {
@@ -840,6 +866,7 @@ function heavyProjectile() {
 // calculate projectile collisions with higher precision than step speed
 async function moveProjectile(p) {
     var hit = false;
+    // let bullet_hit_player = false
     while (!hit && p.count < pLife) {
         await sleep(wait / 4);
 
@@ -855,6 +882,12 @@ async function moveProjectile(p) {
                 moveProjectileToHitLocation(p);
             } else {
                 // hit was with player, do not find exact hit location
+                // console.log('hit player')
+                // bullet_hit_player = true
+                // console.log(p)
+                //
+                // // Play bullet hit sound to the shooter player
+                // p.socket.emit("play bullet hit sound");
             }
             if (p.fracture > 0) {
                 fracture(p);
@@ -873,6 +906,7 @@ async function moveProjectile(p) {
         }
     }
 
+    // return bullet_hit_player
 }
 
 function restartGame() {
