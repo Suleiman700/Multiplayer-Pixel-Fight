@@ -1,6 +1,7 @@
 var fs = require('fs');
 var express = require('express');
 var sio = require('socket.io');
+var cors = require('cors')
 var app = express();
 var http = require('http').createServer(app);
 var io = sio(http);
@@ -94,6 +95,7 @@ fs.readFile(configFile, "utf-8", function (err, data) {
 
 });
 
+app.use(cors())
 
 // this allows cross origin JSON requests (to get status message)
 app.use(function (req, res, next) {

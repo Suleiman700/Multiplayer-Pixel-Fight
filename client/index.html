@@ -5,6 +5,7 @@
     <title>Blockball - A Blocky Snowball Battle</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
     <style>
         #blocker {
             position: absolute;
@@ -168,7 +169,10 @@
             Message: T <br />
             Change Shot Type: X <br />
             <br />
-            <span style="font-size:36px"><button id="startButton">Play!</button></span>
+            <span style="font-size:36px">
+                <button class="btn btn-primary" id="startButton">Play!</button>
+                <button class="btn btn-danger" id="menuButton">Back To Menu</button>
+            </span>
         </div>
 
     </div>
@@ -179,6 +183,14 @@
     <script src="/client/script.js"></script>
     <script type="module" src="/client/blockball.js"></script>
     <script src="/client/messaging.js"></script>
+
+    <script>
+        document.querySelector('#menuButton').addEventListener('click', () => {
+            const url = window.location.href
+            console.log(url)
+            window.location.href = url.replace('/play', '')
+        })
+    </script>
 </body>
 
 </html>
