@@ -1,0 +1,7 @@
+20057
+Small City
+Bring your courage and come fight in this small city
+Free For All
+maps/smallCity.json
+true
+/images/maps/MapsImages_SmallCity

@@ -1,0 +1,7 @@
+20055
+Lake House
+Fight against other players around a beautiful lake
+Free For All
+maps/lakeHouse.json
+true
+/images/maps/MapsImages_LakeHouse

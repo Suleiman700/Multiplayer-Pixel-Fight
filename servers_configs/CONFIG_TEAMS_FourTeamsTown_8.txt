@@ -1,0 +1,7 @@
+20058
+Four Teams Town
+Bring your courage and come fight in this small city
+Teams - 4
+maps/teamsTown.json
+true
+/images/maps/MapsImages_FourTeamsTown

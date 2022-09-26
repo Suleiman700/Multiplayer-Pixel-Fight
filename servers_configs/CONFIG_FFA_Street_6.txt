@@ -1,0 +1,7 @@
+20056
+Street
+Enjoy street fights in a Free For All game
+Free For All
+maps/street.json
+true
+/images/maps/MapsImages_Street

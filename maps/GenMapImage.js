@@ -3,23 +3,22 @@ function gen_map_image(_map_name) {
         case 'welcome':
             return __dirname + '/images/welcome.jpg'
             // res.sendFile(__dirname + '/images/maps/welcome.jpg');
-            break
         case 'MapsImages_KingOfTheHill':
             return __dirname + '/images/kingOfTheHill.jpg'
-            // res.sendFile(__dirname + '/images/maps/kingOfTheHill.jpg');
-            break
         case 'MapsImages_Islands':
             return __dirname + '/images/islands.jpg'
-            // res.sendFile(__dirname + '/images/maps/islands.jpg');
-            break;
         case 'MapsImages_TreeHouse':
             return __dirname + '/images/treeHouse.jpg'
-            // res.sendFile(__dirname + '/images/maps/treeHouse.jpg');
-            break;
         case 'MapsImages_FirstTown':
             return __dirname + '/images/firstTown.jpg'
-            // res.sendFile(__dirname + '/images/maps/firstTown.jpg');
-            break;
+        case 'MapsImages_LakeHouse':
+            return __dirname + '/images/lakeHouse.jpg'
+        case 'MapsImages_Street':
+            return __dirname + '/images/street.jpg'
+        case 'MapsImages_SmallCity':
+            return __dirname + '/images/smallCity.jpg'
+        case 'MapsImages_FourTeamsTown':
+            return __dirname + '/images/fourTeamsTown.jpg'
     }
 }
 

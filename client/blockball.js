@@ -153,10 +153,10 @@ function init() {
     };
     var onKeyUp = function (event) {
         switch (event.keyCode) {
-            case 16: // shift
-                camera.fov = 75;
-                controls.speedFactor = 0.002;
-                camera.updateProjectionMatrix();
+            // case 16: // shift
+            //     camera.fov = 75;
+            //     controls.speedFactor = 0.002;
+            //     camera.updateProjectionMatrix();
             case 38: // up
             case 87: // w
                 startTime = Date.now();

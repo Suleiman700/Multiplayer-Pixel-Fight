@@ -5,7 +5,15 @@
   "main": "SERVER_FFA_Islands_2.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node SERVER_FFA_Islands_2.js"
+    "start": "node SERVER_FFA_Islands_2.js",
+    "server_1": "node SERVER_CTF_MountainTop_1.js",
+    "server_2": "node SERVER_FFA_Islands_2.js",
+    "server_3": "node SERVER_CTF_TreeHouse_3.js",
+    "server_4": "node SERVER_FFA_FirstTown_4.js",
+    "server_5": "node SERVER_FFA_LakeHouse_5.js",
+    "server_6": "node SERVER_FFA_Street_6.js",
+    "server_7": "node SERVER_FFA_SmallCity_7.js",
+    "server_8": "node SERVER_TEAMS_FourTeamsTown_8.js"
   },
   "repository": {
     "type": "git",
