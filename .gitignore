@@ -1,4 +1,4 @@
-config.txt
+servers_configs/CONFIG_KOTH_MountainTop_1.txt
 config3030.txt
 config3031.txt
 config3032.txt
@@ -93,7 +93,7 @@ typings/
 # nuxt.js build output
 .nuxt
 
-# react / gatsby 
+# react / gatsby
 public/
 
 # vuepress build output

@@ -2,10 +2,10 @@
   "name": "khe19",
   "version": "1.0.0",
   "description": "3d js fps",
-  "main": "server.js",
+  "main": "SERVER_FFA_Islands_2.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node SERVER_FFA_Islands_2.js"
   },
   "repository": {
     "type": "git",

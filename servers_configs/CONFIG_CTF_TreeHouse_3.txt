@@ -1,0 +1,7 @@
+20053
+Tree House
+Play Capture the Flag in this tall tree house
+Capture The Flag
+maps/treeHouse3.json
+true
+/images/maps/MapsImages_TreeHouse

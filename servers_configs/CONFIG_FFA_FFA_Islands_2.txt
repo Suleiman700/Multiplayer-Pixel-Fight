@@ -1,0 +1,7 @@
+20052
+Islands
+Explore a world of floating islands in a Free For All game
+Free For All
+maps/islands.json
+true
+/images/maps/MapsImages_Islands

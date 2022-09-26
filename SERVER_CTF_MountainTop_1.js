@@ -4,6 +4,7 @@ var sio = require('socket.io');
 var app = express();
 var http = require('http').createServer(app);
 var io = sio(http);
+const gen_map_image = require('./maps/GenMapImage')
 
 var port; //runs on heroku or localhost:3030
 
@@ -37,17 +38,17 @@ var gameTypes = new allGameTypes();
 fs.appendFileSync('pids.txt', process.pid + "\n");
 // fs.appendFileSync('pids.txt', process.pid + "\n");
 
-var configFile = 'config.txt' //process.argv[2];
+var configFile = 'servers_configs/CONFIG_KOTH_MountainTop_1.txt' //process.argv[2];
 // if(configFile == undefined){
 //   //console.error()
-//   console.error("Please specify a config file to use in the form: npm start config.txt");
+//   console.error("Please specify a config file to use in the form: npm start CONFIG_KOTH_MountainTop_1.txt");
 //   process.exit(1);
 // }
 
 fs.readFile(configFile, "utf-8", function (err, data) {
     if (err) {
         console.log(err);
-        console.log("!!!\nPlease Create a config.txt file with the following format:");
+        console.log("!!!\nPlease Create a CONFIG_KOTH_MountainTop_1.txt file with the following format:");
         console.log("line 0: PORT NUMBER");
         console.log("line 1: SERVER NAME");
         console.log("line 2: SERVER DESCRIPTION");
@@ -56,13 +57,14 @@ fs.readFile(configFile, "utf-8", function (err, data) {
         console.log("--------");
     } else {
         content = data.split("\n");
-        port = 20056 //content[0];
+        port = content[0]; // 20056
         SERVER_NAME = content[1];
         SERVER_DESCRIPTION = content[2];
         GAME_TYPE = content[3];
         MAPFILE = content[4];
         ALLOWGAMERESTARTS = content[5];
         MAPIMAGE = content[6]; //'/images/maps/smallCity'
+        console.log(MAPIMAGE)
         // if(content[4] == "true"){
         //   ALLOWGAMERESTARTS = true;
         // }else{
@@ -150,12 +152,8 @@ app.get("/movements/jumps/cartoon_jump", function (req, res) {
 });
 
 app.get("/images/maps/:map_name", function (req, res) {
-    // console.log(req.path)
-
-    switch (req.params.map_name) {
-        case 'MapsImages_KingOfTheHill':
-            res.sendFile(__dirname + '/images/maps/kingOfTheHill.jpg');
-    }
+    const map_image = gen_map_image(req.params.map_name)
+    res.sendFile(map_image)
 });
 
 app.get("/sounds/guns/bullet_hit", function (req, res) {
@@ -172,7 +170,7 @@ app.get("/status.json", function (req, res) {
         description: SERVER_DESCRIPTION,
         game_type: GAME_TYPE,
         players: players.length,
-        maxPlayers: 999,
+        maxPlayers: 100,
         image: MAPIMAGE,
         test: 'test'
     };
@@ -1303,9 +1301,3 @@ events[gameTypes.KOTH]["update leaderboard"] = function () {
         restartGame();
     }
 }
-
-
-
-
-
-

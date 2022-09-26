@@ -1,0 +1,7 @@
+20054
+First Town
+Launch through buildings and explore underground tunnels on Blockball's first full size map
+Free For All
+maps/firstTown.json
+true
+/images/maps/MapsImages_FirstTown
