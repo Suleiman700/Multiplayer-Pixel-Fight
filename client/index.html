@@ -144,9 +144,76 @@
             cursor: pointer;
         }
     </style>
+
+    <style>
+        .loading-bar-div {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            z-index: 10;
+            background: black;
+        }
+        .loading-bar {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 302px;
+            height: 32px;
+            background: #2f4565;
+            margin-top: -15px;
+            margin-left: -150px;
+            border-radius: 5px;
+            box-sizing: border-box;
+            padding-right: 2px;
+            padding-top: 2px;
+            padding-left: 2px;
+        }
+        .loading-bar .loading-progress {
+            height: 28px;
+            position: relative;
+            border-radius: 4px;
+            background: linear-gradient(to top, #21a7e0 0%, #1b7ccf 20%, #21a7e0 100%);
+            overflow: hidden;
+            box-sizing: border-box;
+            box-shadow: inset 0 0 3px rgba(255, 255, 255, .5);
+        }
+        .loading-bar .loading-progress:before {
+            content: ' ';
+            width: 4px;
+            height: 4px;
+            border-radius: 100%;
+            box-shadow: 13px 47px 0px rgba(255, 255, 255, .2), 175px 79px 0px rgba(255, 255, 255, .2), 248px 27px 0px rgba(255, 255, 255, .2), 54px 84px 0px rgba(255, 255, 255, .2), 233px 94px 0px rgba(255, 255, 255, .2), 54px 86px 0px rgba(255, 255, 255, .2), 87px 100px 0px rgba(255, 255, 255, .2), 286px 52px 0px rgba(255, 255, 255, .2), 240px 74px 0px rgba(255, 255, 255, .2), 282px 90px 0px rgba(255, 255, 255, .2), 201px 100px 0px rgba(255, 255, 255, .2), 162px 4px 0px rgba(255, 255, 255, .2), 275px 55px 0px rgba(255, 255, 255, .2), 63px 19px 0px rgba(255, 255, 255, .2), 131px 88px 0px rgba(255, 255, 255, .2), 30px 96px 0px rgba(255, 255, 255, .2), 20px 79px 0px rgba(255, 255, 255, .2), 75px 75px 0px rgba(255, 255, 255, .2), 128px 59px 0px rgba(255, 255, 255, .2), 212px 6px 0px rgba(255, 255, 255, .2), 243px 5px 0px rgba(255, 255, 255, .2), 64px 42px 0px rgba(255, 255, 255, .2), 271px 20px 0px rgba(255, 255, 255, .2), 141px 19px 0px rgba(255, 255, 255, .2), 210px 92px 0px rgba(255, 255, 255, .2), 190px 65px 0px rgba(255, 255, 255, .2), 131px 96px 0px rgba(255, 255, 255, .2), 246px 76px 0px rgba(255, 255, 255, .2), 99px 27px 0px rgba(255, 255, 255, .2), 70px 87px 0px rgba(255, 255, 255, .2), 113px 56px 0px rgba(255, 255, 255, .2), 53px 15px 0px rgba(255, 255, 255, .2), 25px 7px 0px rgba(255, 255, 255, .2), 6px 39px 0px rgba(255, 255, 255, .2), 66px 1px 0px rgba(255, 255, 255, .2), 126px 8px 0px rgba(255, 255, 255, .2), 100px 36px 0px rgba(255, 255, 255, .2), 279px 55px 0px rgba(255, 255, 255, .2), 39px 74px 0px rgba(255, 255, 255, .2), 180px 64px 0px rgba(255, 255, 255, .2), 282px 21px 0px rgba(255, 255, 255, .2), 92px 96px 0px rgba(255, 255, 255, .2), 200px 5px 0px rgba(255, 255, 255, .2), 286px 60px 0px rgba(255, 255, 255, .2), 121px 61px 0px rgba(255, 255, 255, .2), 18px 89px 0px rgba(255, 255, 255, .2), 278px 24px 0px rgba(255, 255, 255, .2), 5px 11px 0px rgba(255, 255, 255, .2), 255px 45px 0px rgba(255, 255, 255, .2), 173px 23px 0px rgba(255, 255, 255, .2), 95px 61px 0px rgba(255, 255, 255, .2), 93px 84px 0px rgba(255, 255, 255, .2), 211px 73px 0px rgba(255, 255, 255, .2), 43px 26px 0px rgba(255, 255, 255, .2), 287px 19px 0px rgba(255, 255, 255, .2), 165px 46px 0px rgba(255, 255, 255, .2), 189px 75px 0px rgba(255, 255, 255, .2), 211px 27px 0px rgba(255, 255, 255, .2), 156px 100px 0px rgba(255, 255, 255, .2), 247px 41px 0px rgba(255, 255, 255, .2);
+            position: absolute;
+            animation: particle-up 7s infinite linear;
+            transform: translateY(28px);
+        }
+        .loading-bar .loading-progress:after {
+            content: ' ';
+            width: 10px;
+            height: 10px;
+            border-radius: 100%;
+            box-shadow: 140px 28px 2px rgba(255, 255, 255, .2), 13px 61px 2px rgba(255, 255, 255, .2), 97px 42px 2px rgba(255, 255, 255, .2), 7px 37px 2px rgba(255, 255, 255, .2), 37px 83px 2px rgba(255, 255, 255, .2), 283px 69px 2px rgba(255, 255, 255, .2), 225px 65px 2px rgba(255, 255, 255, .2), 131px 85px 2px rgba(255, 255, 255, .2), 94px 57px 2px rgba(255, 255, 255, .2), 63px 75px 2px rgba(255, 255, 255, .2), 300px 74px 2px rgba(255, 255, 255, .2), 236px 74px 2px rgba(255, 255, 255, .2), 244px 56px 2px rgba(255, 255, 255, .2), 297px 4px 2px rgba(255, 255, 255, .2), 206px 89px 2px rgba(255, 255, 255, .2), 29px 81px 2px rgba(255, 255, 255, .2), 220px 15px 2px rgba(255, 255, 255, .2), 295px 79px 2px rgba(255, 255, 255, .2), 297px 68px 2px rgba(255, 255, 255, .2), 288px 86px 2px rgba(255, 255, 255, .2), 219px 93px 2px rgba(255, 255, 255, .2), 298px 97px 2px rgba(255, 255, 255, .2), 4px 18px 2px rgba(255, 255, 255, .2), 2px 6px 2px rgba(255, 255, 255, .2), 109px 99px 2px rgba(255, 255, 255, .2), 51px 16px 2px rgba(255, 255, 255, .2), 111px 60px 2px rgba(255, 255, 255, .2), 254px 40px 2px rgba(255, 255, 255, .2), 295px 55px 2px rgba(255, 255, 255, .2), 232px 20px 2px rgba(255, 255, 255, .2), 39px 76px 2px rgba(255, 255, 255, .2), 132px 30px 2px rgba(255, 255, 255, .2), 293px 24px 2px rgba(255, 255, 255, .2), 133px 87px 2px rgba(255, 255, 255, .2), 202px 37px 2px rgba(255, 255, 255, .2), 70px 17px 2px rgba(255, 255, 255, .2), 189px 20px 2px rgba(255, 255, 255, .2), 202px 1px 2px rgba(255, 255, 255, .2), 177px 54px 2px rgba(255, 255, 255, .2), 201px 58px 2px rgba(255, 255, 255, .2), 237px 11px 2px rgba(255, 255, 255, .2), 90px 17px 2px rgba(255, 255, 255, .2), 249px 31px 2px rgba(255, 255, 255, .2), 183px 89px 2px rgba(255, 255, 255, .2), 34px 80px 2px rgba(255, 255, 255, .2), 76px 99px 2px rgba(255, 255, 255, .2), 50px 63px 2px rgba(255, 255, 255, .2), 195px 56px 2px rgba(255, 255, 255, .2), 231px 34px 2px rgba(255, 255, 255, .2), 297px 19px 2px rgba(255, 255, 255, .2);
+            position: absolute;
+            transform: translateY(28px);
+            animation: particle-up 10s infinite linear;
+        }
+        @keyframes particle-up {
+            to {
+                transform: translateY(-130px);
+            }
+        }
+
+    </style>
 </head>
 
 <body>
+    <div class="loading-bar-div">
+        <div class="loading-bar" style="z-index: 10;">
+            <div class="loading-progress" style="width: 0%"></div>
+            <h3 class="text-center text-white my-3">Loading In progress</h3>
+            <p class="text-center text-muted"><span id="loading_text">Started loading files...</span></p>
+        </div>
+    </div>
     <p class="ping" style="position: absolute;">Ping: <span id="ping_text">Checking...</span></p>
     <div id="leaderboard">Leaderboard</div>
     <table id="chat" style="visibility: hidden;">
@@ -184,10 +251,12 @@
         </div>
 
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     <script src="/socket.io/socket.io.js"></script>
-<!--    <script src="/three.js"></script>-->
-    <script src="https://cdn.jsdelivr.net/npm/three@0.115/build/three.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.115/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="three.js"></script>
+<!--    <script src="https://cdn.jsdelivr.net/npm/three@0.115/build/three.js"></script>-->
+<!--    <script src="https://cdn.jsdelivr.net/npm/three@0.115/examples/js/loaders/GLTFLoader.js"></script>-->
     <script src="/client/script.js"></script>
     <script type="module" src="/client/blockball.js"></script>
     <script src="/client/messaging.js"></script>

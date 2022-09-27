@@ -118,7 +118,8 @@ app.get('/client/script.js', function (req, res) {
 });
 
 app.get('/three.js', function (req, res) {
-    res.sendFile(__dirname + '/node_modules/three/three.js');
+    res.sendFile(__dirname + '/js/three.js');
+    // res.sendFile(__dirname + '/node_modules/three/three.js');
 });
 
 app.get('/three.module.js', function (req, res) {

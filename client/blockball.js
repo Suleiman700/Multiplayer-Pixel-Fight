@@ -129,6 +129,7 @@ function init() {
                     canJump = false;
                     velocity.y += 180;
                     var audio = new Audio('/movements/jumps/cartoon_jump');
+                    // var audio = new Audio('/movements/jumps/cartoon_jump');
                     audio.volume = 0.1
                     audio.play();
                 }
@@ -181,6 +182,7 @@ function init() {
     document.addEventListener('keydown', onKeyDown, false);
     document.addEventListener('keyup', onKeyUp, false);
     document.addEventListener('click', onClick, false);
+
 
 
     var light = new THREE.DirectionalLight(0xffffff, 1);
@@ -1000,4 +1002,4 @@ setInterval(() => {
         ping_text.innerText = Date.now() - start + 'ms';
 
     });
-}, 10000);
+}, 1000);

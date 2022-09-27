@@ -34545,7 +34545,47 @@
 
 	}
 
+
 	var DefaultLoadingManager = new LoadingManager();
+
+    DefaultLoadingManager.onStart = function ( url, itemsLoaded, itemsTotal ) {
+        // console.log( 'Started loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
+    };
+
+    DefaultLoadingManager.onLoad = function ( ) {
+        // console.log( 'Loading complete!');
+
+        setTimeout(() => {
+            $('.loading-bar-div').slideUp(500)
+            $('.loading-bar').remove()
+            // document.querySelector('.loading-bar-div').remove()
+        }, 500)
+
+    };
+
+    let loading_shown = true
+    DefaultLoadingManager.onProgress = function ( url, itemsLoaded, itemsTotal ) {
+        // console.log( 'Loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
+
+        // Show loading text
+        if (loading_shown) {
+            const loading_text = document.querySelector('#loading_text')
+            loading_text.innerText = `Loaded ${itemsLoaded} of ${itemsTotal} files.`
+
+            $('.loading-progress').animate({
+                width : (itemsLoaded / itemsTotal * 100) + '%'
+            }, 50);
+
+            loading_shown = false
+        }
+
+    };
+
+    DefaultLoadingManager.onError = function ( url ) {
+        console.log( 'There was an error loading ' + url );
+    };
+
+
 
 	/**
 	 * @author alteredq / http://alteredqualia.com/
@@ -39154,6 +39194,7 @@
 			if ( json !== undefined && json.length > 0 ) {
 
 				var manager = new LoadingManager( onLoad );
+
 
 				var loader = new ImageLoader( manager );
 				loader.setCrossOrigin( this.crossOrigin );
