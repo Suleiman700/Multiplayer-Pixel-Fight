@@ -990,3 +990,14 @@ async function sendDataToServer() {
 
 socket.emit("map");
 sendDataToServer();
+
+
+const ping_text = document.querySelector('#ping_text')
+setInterval(() => {
+    const start = Date.now();
+    socket.emit("get ping", () => {
+        // const duration = Date.now() - start;
+        ping_text.innerText = Date.now() - start + 'ms';
+
+    });
+}, 10000);

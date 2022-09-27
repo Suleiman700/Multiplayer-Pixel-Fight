@@ -25,6 +25,13 @@
             user-select          : none;
         }
 
+        .ping {
+            right: 10px;
+            bottom: 0;
+            z-index: 2;
+            color: #ffffff;
+        }
+
         #leaderboard {
             position: absolute;
             left: 10px;
@@ -140,6 +147,7 @@
 </head>
 
 <body>
+    <p class="ping" style="position: absolute;">Ping: <span id="ping_text">Checking...</span></p>
     <div id="leaderboard">Leaderboard</div>
     <table id="chat" style="visibility: hidden;">
         <tr><td style="visibility: hidden;">text</td></tr>
@@ -186,9 +194,7 @@
 
     <script>
         document.querySelector('#menuButton').addEventListener('click', () => {
-            const url = window.location.href
-            console.log(url)
-            window.location.href = url.replace('/play', '')
+            window.location.href = window.location.href.replace('/play', '')
         })
     </script>
 </body>

@@ -504,6 +504,10 @@ io.on("connection", function (socket) {
         }
     });
 
+    socket.on("get ping", (callback) => {
+        callback();
+    });
+
     // Play bullet sound to all players in a room
     socket.on("play bullet sound", function (shooter_pos) {
         /*
