@@ -743,6 +743,9 @@ function respawn(p) {
 
     p.socket.emit("updateRespawnLocation", newLocation);
     p.position = {x: 1000, y: 1000, z: 1000};
+
+    // Reset player snowballs count
+    p.snowballCount = 20
 }
 
 function getValidSpawnLocation(team) {

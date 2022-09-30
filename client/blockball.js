@@ -87,7 +87,8 @@ function init() {
             loadStatus = 0;
 
             playerSnowballCount--;
-            document.getElementById('snowballCount').innerHTML = playerSnowballCount;
+            // document.getElementById('snowballCount').innerHTML = playerSnowballCount;
+            document.getElementById('HUD_snowballCount').innerHTML = playerSnowballCount;
 
             console.log('shoot')
 
@@ -456,6 +457,7 @@ function animate() {
         loadStatus += (time - prevTime) / reloadTime;
         loadStatus = Math.min(loadStatus, 1);
         document.getElementById('status-bar').style.width = (loadStatus * 100) + "%";
+        document.getElementById('gun_reload_bar').style.width = (loadStatus * 100) + "%";
 
         // if ( controls.getObject().position.y < 10 ) {
         //     velocity.y = 0;
@@ -917,7 +919,6 @@ socket.on("objects", function (things) {
 });
 
 socket.on("updateRespawnLocation", function (position) {
-    console.log('updateRespawnLocation')
     // Store player next spawn point
     next_spawn_point['x'] = position.x * 20
     next_spawn_point['y'] = (position.z + 2) * 20
@@ -936,15 +937,19 @@ socket.on("updateRespawnLocation", function (position) {
     controls.getObject().position.z = position.y * 20;
     playerJustFell = false;
 
-    you_died_text.style.display = 'block'
 
     socket.emit("respawned", {});
-    console.log('respawned')
 
     if (!inLoadoutPick) {
         controls.unlock();
 
         inLoadoutPick = true
+
+        you_died_text.style.display = 'block'
+
+        playerSnowballCount = 20
+        // snowballCount.innerText = 20
+        HUD_snowballCount.innerText = 20
 
         // Show loadout screen
         // document.querySelector('#spawn_screen').style.display = 'block'
@@ -1007,7 +1012,8 @@ socket.on("remove item", function (f) {
 
 socket.on("update snowball count", function (count) {
     playerSnowballCount = count;
-    document.getElementById('snowballCount').innerHTML = playerSnowballCount;
+    // document.getElementById('snowballCount').innerHTML = playerSnowballCount;
+    document.getElementById('HUD_snowballCount').innerHTML = playerSnowballCount;
 });
 
 socket.on("leaderboard", function (board) {
