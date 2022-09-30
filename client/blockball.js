@@ -918,6 +918,12 @@ socket.on("objects", function (things) {
     }
 });
 
+socket.on("updateHealthAfterGettingDamage", (_new_health) => {
+    const health_percent = _new_health/10
+    document.querySelector('#health-bar .level').style.width = `${health_percent}%`
+    document.querySelector('#health-text').innerText = health_percent
+})
+
 socket.on("updateRespawnLocation", function (position) {
     // Store player next spawn point
     next_spawn_point['x'] = position.x * 20
@@ -1108,12 +1114,12 @@ document.addEventListener('click', () => {
     }
 })
 
-// Show pause menu
-function show_pause_menu() {
-    console.log('here')
-}
+// Show new kill text
+socket.on("showNewKillText", () => {
+    const new_kill_div = document.getElementById('new_kill_div')
+    new_kill_div.style.display = 'block'
 
-//
-// document.querySelector('#btn_continue_playing').addEventListener('click', () => {
-//
-// })
+    setTimeout(() => {
+        new_kill_div.style.display = 'none'
+    }, 1500)
+})

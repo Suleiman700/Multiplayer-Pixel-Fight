@@ -355,6 +355,11 @@ var reloadTime = {
     heavy: 900
 };
 
+const projectileDamage = {
+    scout: 200.0,
+    sniper: 500.0,
+    heavy: 100.0
+}
 
 io.on("connection", function (socket) {
     var player = {};
@@ -362,6 +367,7 @@ io.on("connection", function (socket) {
     player.name = "player " + player.id;
     player.socket = socket;
     player.snowballCount = 20;
+    player.health = 1000.0;
     player.kills = [];
     player.deaths = [];
     player.position = {x: 0, y: 0, z: 1000};
@@ -1051,26 +1057,40 @@ events[gameTypes.FFA]["player left"] = function (player) {
 }
 events[gameTypes.FFA]["player hit"] = function (player, p) {
     announceHit(player, p.owner);
-    player.deaths.push(p.owner.id);
-    p.owner.kills.push(player.id);
 
-    respawn(player);
+    // Update damaged player health
+    const damage_amount = projectileDamage[p.owner['class']]
+    player.health = parseFloat(player.health - damage_amount)
+    player.socket.emit("updateHealthAfterGettingDamage", player.health);
 
-    if (ALLOWGAMERESTARTS && p.owner.kills.length >= 20) {
-        for (var i in players) {
-            players[i].socket.emit("restart screen");
-            if (players[i].id != p.owner.id) {
-                players[i].socket.emit("message", {
-                    from: "server",
-                    text: "Game Over. " + player.name + " won! Press Play to start a new game."
-                });
-            } else {
-                players[i].socket.emit("message", {from: "server", text: "You win! Press Play to start a new game."});
+    // If damaged player died
+    if (player.health < 1) {
+        player.deaths.push(p.owner.id);
+        p.owner.kills.push(player.id);
+
+        // Respawn player
+        respawn(player);
+        player.health = 1000.0
+
+        // Show new kill text for the shooter player
+        p.owner.socket.emit("showNewKillText");
+
+        if (ALLOWGAMERESTARTS && p.owner.kills.length >= 20) {
+            for (var i in players) {
+                players[i].socket.emit("restart screen");
+                if (players[i].id != p.owner.id) {
+                    players[i].socket.emit("message", {
+                        from: "server",
+                        text: "Game Over. " + player.name + " won! Press Play to start a new game."
+                    });
+                } else {
+                    players[i].socket.emit("message", {from: "server", text: "You win! Press Play to start a new game."});
+                }
             }
+            restartGame();
         }
-        restartGame();
+        events[gameType]["update leaderboard"]();
     }
-    events[gameType]["update leaderboard"]();
 }
 events[gameTypes.FFA]["player fell"] = function (player) {
     // nothing
@@ -1115,19 +1135,31 @@ events[gameTypes.CTF]["player left"] = function (player) {
 
 events[gameTypes.CTF]["player hit"] = function (player, p) {
     announceHit(player, p.owner);
-    player.deaths.push(p.owner.id);
-    p.owner.kills.push(player.id);
 
-    //Drop the flag where the player is standing:
-    if (player.hasFlag) {
-        let flag = player.hasFlag;
-        player.hasFlag = false;
-        moveFlagToPlayer(flag, player);
-        player.hasFlag = flag;
-        playerDropFlag(player);
+    // Update damaged player health
+    const damage_amount = projectileDamage[p.owner['class']]
+    player.health = parseFloat(player.health - damage_amount)
+    player.socket.emit("updateHealthAfterGettingDamage", player.health);
+
+    if (player.health < 1) {
+        player.deaths.push(p.owner.id);
+        p.owner.kills.push(player.id);
+
+        //Drop the flag where the player is standing:
+        if (player.hasFlag) {
+            let flag = player.hasFlag;
+            player.hasFlag = false;
+            moveFlagToPlayer(flag, player);
+            player.hasFlag = flag;
+            playerDropFlag(player);
+        }
+
+        respawn(player);
+        player.health = 1000.0
+
+        // Show new kill text for the shooter player
+        p.owner.socket.emit("showNewKillText");
     }
-
-    respawn(player);
 }
 
 events[gameTypes.CTF]["player fell"] = function (player) {
@@ -1207,9 +1239,21 @@ events[gameTypes.TEAMS]["player left"] = function (player) {
 
 events[gameTypes.TEAMS]["player hit"] = function (player, p) {
     announceHit(player, p.owner);
-    teamScores[player.team]++;
-    respawn(player);
-    events[gameType]["update leaderboard"]();
+
+    // Update damaged player health
+    const damage_amount = projectileDamage[p.owner['class']]
+    player.health = parseFloat(player.health - damage_amount)
+    player.socket.emit("updateHealthAfterGettingDamage", player.health);
+
+    if (player.health < 1) {
+        teamScores[player.team]++;
+        respawn(player);
+        player.health = 1000.0
+        events[gameType]["update leaderboard"]();
+
+        // Show new kill text for the shooter player
+        p.owner.socket.emit("showNewKillText");
+    }
 }
 
 
@@ -1257,17 +1301,31 @@ events[gameTypes.KOTH]["player left"] = function (player) {
 
 events[gameTypes.KOTH]["player hit"] = function (player, p) {
     announceHit(player, p.owner);
-    if (player.hasFlag) {
-        let flag = player.hasFlag;
-        player.hasFlag = false;
-        moveFlagToPlayer(flag, player);
-        respawn(player);
-        player.hasFlag = flag;
-        playerDropFlag(player);
-    } else {
-        respawn(player);
+
+    // Update damaged player health
+    const damage_amount = projectileDamage[p.owner['class']]
+    player.health = parseFloat(player.health - damage_amount)
+    player.socket.emit("updateHealthAfterGettingDamage", player.health);
+
+    if (player.health < 1) {
+        if (player.hasFlag) {
+            let flag = player.hasFlag;
+            player.hasFlag = false;
+            moveFlagToPlayer(flag, player);
+            respawn(player);
+            player.hasFlag = flag;
+            playerDropFlag(player);
+
+        } else {
+            respawn(player);
+        }
+        events[gameType]["update leaderboard"]();
+
+        player.health = 1000.0
+
+        // Show new kill text for the shooter player
+        p.owner.socket.emit("showNewKillText");
     }
-    events[gameType]["update leaderboard"]();
 }
 
 events[gameTypes.KOTH]["player fell"] = function (player) {
