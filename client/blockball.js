@@ -22,6 +22,12 @@ var playerClass = "scout";
 var reloadTime = 100;
 var playerSnowballCount = 20;
 let doingWeaponZoom = false // Weapon zoom
+let inLoadoutPick = true
+const next_spawn_point = {
+    x: 0,
+    y: 0,
+    z: 0
+}
 
 init();
 animate();
@@ -56,6 +62,7 @@ function init() {
         blocker.style.display = 'none';
     });
     controls.addEventListener('unlock', function () {
+        console.log(controls['isLocked'])
         blocker.style.display = 'block';
         instructions.style.display = '';
         leaderboard.style.display = '';
@@ -142,6 +149,7 @@ function init() {
                 }
                 break;
             case 88: //x, change class
+                return
                 if (playerClass == "scout") {
                     socket.emit("change class", "sniper");
                 } else if (playerClass == "sniper") {
@@ -894,7 +902,6 @@ function updateProjectile(p) {
     }
 }
 
-
 socket.on("objects", function (things) {
     let p = things.players;
     for (var i in p) {
@@ -910,11 +917,47 @@ socket.on("objects", function (things) {
 });
 
 socket.on("updateRespawnLocation", function (position) {
+    console.log('updateRespawnLocation')
+    // Store player next spawn point
+    next_spawn_point['x'] = position.x * 20
+    next_spawn_point['y'] = (position.z + 2) * 20
+    next_spawn_point['z'] = position.y * 20
+
+
+    // Hide game overlay
+    document.getElementById('game_overlay').style.display = 'none'
+
+    // Show loadout screen
+    $('#spawn_screen').slideDown(1000)
+
+// Set player in sky
     controls.getObject().position.x = position.x * 20;
-    controls.getObject().position.y = (position.z + 2) * 20;
+    controls.getObject().position.y = 10000000 //(position.z + 2) * 20;
     controls.getObject().position.z = position.y * 20;
     playerJustFell = false;
+
+    you_died_text.style.display = 'block'
+
     socket.emit("respawned", {});
+    console.log('respawned')
+
+    if (!inLoadoutPick) {
+        controls.unlock();
+
+        inLoadoutPick = true
+
+        // Show loadout screen
+        // document.querySelector('#spawn_screen').style.display = 'block'
+
+        // Hide game overlay
+        // document.getElementById('game_overlay').style.display = 'none'
+
+        controls.getObject().position.x = position.x * 20;
+        controls.getObject().position.y = 100000 //(position.z + 2) * 20;
+        controls.getObject().position.z = position.y * 20;
+    }
+
+
 })
 
 socket.on("projectile burst", function (p) {
@@ -1003,3 +1046,68 @@ setInterval(() => {
 
     });
 }, 1000);
+
+
+// Loadout buttons
+const loadout_buttons = document.querySelectorAll('.loadout_selector')
+loadout_buttons.forEach(button => {
+    button.addEventListener('click', (e) => {
+        const selected_class = e.target.dataset.class
+
+        // Set selected class name
+        document.getElementById('selected_class_name').innerText = selected_class
+
+        if (selected_class === "scout") {
+            socket.emit("change class", "scout");
+        } else if (selected_class === "sniper") {
+            socket.emit("change class", "sniper");
+        } else if (selected_class === "heavy") {
+            socket.emit("change class", "heavy");
+        }
+
+        // Reset classes borders
+        loadout_buttons.forEach(button => {
+            button.classList.remove('selected_class')
+        })
+
+        // Mark selected class border
+        e.target.classList.add('selected_class')
+    })
+})
+
+// On click 'start playing'
+document.querySelector('#btn_start_playing').addEventListener('click', () => {
+    document.querySelector('#spawn_screen').style.display = 'none'
+    var username = document.getElementById('userName').value;
+    socket.emit("setUser", {name: username});
+
+    lobby_music.pause()
+
+    inLoadoutPick = false
+
+    // Show game overlay
+    document.getElementById('game_overlay').style.display = 'block'
+
+    controls.getObject().position.x = next_spawn_point['x'];
+    controls.getObject().position.y = next_spawn_point['y'];
+    controls.getObject().position.z = next_spawn_point['z'];
+
+    controls.lock();
+    // camera.translateY( +500 );
+})
+
+document.addEventListener('click', () => {
+    if (inLoadoutPick) {
+        lobby_music.play()
+    }
+})
+
+// Show pause menu
+function show_pause_menu() {
+    console.log('here')
+}
+
+//
+// document.querySelector('#btn_continue_playing').addEventListener('click', () => {
+//
+// })

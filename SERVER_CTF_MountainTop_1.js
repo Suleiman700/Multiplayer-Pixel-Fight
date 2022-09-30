@@ -95,6 +95,8 @@ fs.readFile(configFile, "utf-8", function (err, data) {
 
 });
 
+app.use(express.static(__dirname));
+
 app.use(cors())
 
 // this allows cross origin JSON requests (to get status message)
@@ -148,6 +150,10 @@ app.get("/", function (req, res) {
 
 app.get("/bullet_sound", function (req, res) {
     res.sendFile(__dirname + '/sounds/guns/bullet.mp3');
+});
+
+app.get("/lobby/lobby_music", function (req, res) {
+    res.sendFile(__dirname + '/sounds/lobby/lobby_music.mp3');
 });
 
 app.get("/movements/jumps/cartoon_jump", function (req, res) {

@@ -203,53 +203,163 @@
             }
         }
 
+
     </style>
+
+
+<!--    <link rel="apple-touch-icon" type="image/png" href="https://cpwebassets.codepen.io/assets/favicon/apple-touch-icon-5ae1a0698dcc2402e9712f7d01ed509a57814f994c660df9f7a952f3060705ee.png">-->
+
+<!--    <link rel="shortcut icon" type="image/x-icon" href="https://cpwebassets.codepen.io/assets/favicon/favicon-aec34940fbc1a6e787974dcd360f2c6b63348d4b1f4e06c77743096d55480f33.ico">-->
+
+<!--    <link rel="mask-icon" type="image/x-icon" href="https://cpwebassets.codepen.io/assets/favicon/logo-pin-8f3771b1072e3c38bd662872f6b673a722f4b3ca2421637d5596661b4e2132cc.svg" color="#111">-->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" href="client/assets/css/spawn_screen.css">
+
 </head>
 
-<body>
-    <div class="loading-bar-div">
+<body style="padding: 0 !important;">
+    <div class="loading-bar-div" hidden>
         <div class="loading-bar" style="z-index: 10;">
             <div class="loading-progress" style="width: 0%"></div>
             <h3 class="text-center text-white my-3">Loading In progress</h3>
             <p class="text-center text-muted"><span id="loading_text">Started loading files...</span></p>
         </div>
     </div>
-    <p class="ping" style="position: absolute;">Ping: <span id="ping_text">Checking...</span></p>
-    <div id="leaderboard">Leaderboard</div>
-    <table id="chat" style="visibility: hidden;">
-        <tr><td style="visibility: hidden;">text</td></tr>
-        <tr><td style="visibility: hidden;">text</td></tr>
-        <tr><td style="visibility: hidden;">text</td></tr>
-        <tr><td style="visibility: hidden;">text</td></tr>
-        <tr><td style="visibility: hidden;">text</td></tr>
-        <tr><td style="visibility: hidden;">text</td></tr>
-        <tr><td style="visibility: hidden;">text</td></tr>
-        <tr><td><input id="chat-input" type="text"></input></td></tr>
-    </table>
-    <div id="reload-bar"><div id="bar-container"><div id="status-bar"></div></div></div>
-    <div id="snowballCount">20</div>
-    <div id="blocker">
 
-        <div id="instructions">
-            <span style="font-size: 50px">Welcome to BlockBall!</span>
-            <br /><br /><br />
-            <input id="userName" type="text" name="userName" value="userName">
-            <br /><br />
-            Move: WASD<br />
-            Jump: SPACE<br />
-            Look: MOUSE<br />
-            Shoot: Left Click <br />
-            Sprint: WW <br />
-            Scope: SHIFT <br />
-            Message: T <br />
-            Change Shot Type: X <br />
-            <br />
-            <span style="font-size:36px">
+    <div id="game_overlay" style="display: none;">
+        <p class="ping" style="position: absolute;">Ping: <span id="ping_text">Checking...</span></p>
+        <div id="leaderboard">Leaderboard</div>
+        <table id="chat" style="visibility: hidden;">
+            <tr><td style="visibility: hidden;">text</td></tr>
+            <tr><td style="visibility: hidden;">text</td></tr>
+            <tr><td style="visibility: hidden;">text</td></tr>
+            <tr><td style="visibility: hidden;">text</td></tr>
+            <tr><td style="visibility: hidden;">text</td></tr>
+            <tr><td style="visibility: hidden;">text</td></tr>
+            <tr><td style="visibility: hidden;">text</td></tr>
+            <tr><td><input id="chat-input" type="text"></input></td></tr>
+        </table>
+        <div id="reload-bar"><div id="bar-container"><div id="status-bar"></div></div></div>
+        <div id="snowballCount">20</div>
+        <div id="blocker">
+            <div id="instructions">
+                <span style="font-size: 50px">Welcome to BlockBall!</span>
+                <br /><br /><br />
+                <input id="userName1" type="text" name="userName" value="userName">
+                <br /><br />
+                Move: WASD<br />
+                Jump: SPACE<br />
+                Look: MOUSE<br />
+                Shoot: Left Click <br />
+                Sprint: WW <br />
+                Scope: SHIFT <br />
+                Message: T <br />
+                Change Shot Type: X <br />
+                <br />
+                <span style="font-size:36px">
+                <button class="btn btn-primary" id="btn_continue_playing">Continue</button>
                 <button class="btn btn-primary" id="startButton">Play!</button>
                 <button class="btn btn-danger" id="menuButton">Back To Menu</button>
             </span>
+            </div>
         </div>
+    </div>
 
+    <div id="spawn_screen" style="width: 100vw; height: 100vh; z-index: 10;">
+        <div class="main">
+            <div class="main_inner">
+                <div class="main_inner__logo" hidden>
+                    <a href="">
+                        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/vgqlogo.svg">
+                    </a>
+                </div>
+                <div style="height: 100%; border: 10px solid #ea894f;">
+                    <div class="main_inner__title text-center" style="display: grid; justify-content: center;">
+                        <h1 class="text-center" style="border-top: 0;">Choose Your Loadout</h1>
+                        <h1 class="text-center">Current Loadout: <span class="text-danger"><strong id="selected_class_name">Scout</strong></span></h1>
+                        <p>Click on any loadout to use it</p>
+                        <div class="">
+                            <hr />
+                            <input type="text" class="form-control" id="userName" placeholder="Enter your username">
+                            <button class="btn btn-primary w-100 mt-3" id="btn_start_playing" style="cursor: pointer; border: 1px solid black; padding: 10px; border-radius: 25px; background: #754427; color: white;">Start Playing!</button>
+                        </div>
+                        <!--                    <a>Need a hint?</a>-->
+                    </div>
+                    <h1 class="text-danger text-center pt-3" id="you_died_text" style="display: none;">YOU DIED!</h1>
+                    <div class="main_inner__circle" style="background: rgb(234, 137, 79);transform: translateY(-50%) scale(1);transition-duration: 500ms;">
+                        <h1 class="text-white text-center"><strong>CYLINDER WARS</strong></h1>
+                    </div>
+                    <div class="main_inner__scenes">
+                        <div class="scene akuaku" style="display: block; bottom: -400px; opacity: 1;">
+                            <div style="display: flex;justify-content: center;align-items: center;position: absolute;/* height: 100%; */width: 100%;">
+                                <img src="https://cdn-icons-png.flaticon.com/512/5853/5853947.png" alt="" style="width: 255px;">
+                            </div>
+                            <div hidden class="container">
+                                <div class="feather"></div>
+                                <div class="feather"></div>
+                                <div class="feather"></div>
+                                <div class="feather"></div>
+                                <div class="body"></div>
+                                <div class="eyebrows"></div>
+                                <div class="eyebrows"></div>
+                                <div class="eye"></div>
+                                <div class="eye"></div>
+                                <div class="nose"></div>
+                                <div class="lip"></div>
+                                <div class="lip"></div>
+                                <div class="beard"></div>
+                                <div class="beard"></div>
+                            </div>
+                        </div>
+                        <div class="scene kirby" style="display: none; bottom: -400px;">
+                            <div id="container">
+                                <div class="kirby">
+                                    <div class="body">
+                                        <div class="face">
+                                            <div class="eyes">
+                                                <div class="eye"></div>
+                                                <div class="eye"></div>
+                                            </div>
+                                            <div class="mouth"></div>
+                                            <div class="cheeks">
+                                                <div class="cheek"></div>
+                                                <div class="cheek"></div>
+                                            </div>
+                                        </div>
+                                        <div class="arms">
+                                            <div class="arm"></div>
+                                            <div class="arm"></div>
+                                        </div>
+                                        <div class="feet">
+                                            <div class="foot"></div>
+                                            <div class="foot"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="main_inner__info" style="bottom: 40px; opacity: 1;">
+                        <!--                    <button class="btn btn-primary" style="height: fit-content;">Play Now</button>-->
+                        <p>A Fast Shooting Game</p>
+                        <span>By Suleiman</span>
+                        <!--                    <span style="cursor: pointer; border: 1px solid black; padding: 10px; border-radius: 25px; background: #754427; color: white;">Start Playing!</span>-->
+                        <a class="codepen" href="https://www.codepen.io/kathykato" target="_blank">
+                            <i class="fa fa-codepen"></i>
+                        </a>
+                        <a class="twitter" href="https://www.twitter.com/kato_katherine" target="_blank">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </div>
+                    <div class="main_inner__answers">
+                        <div class="answer loadout_selector selected_class" data-class="scout" style="left: 0px; opacity: 1;">Scout</div>
+                        <div class="answer loadout_selector" data-class="sniper" style="left: 0px; opacity: 1;">Sniper</div>
+                        <div class="answer loadout_selector" data-class="heavy" style="left: 0px; opacity: 1;">Heavy</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
@@ -266,6 +376,8 @@
             window.location.href = window.location.href.replace('/play', '')
         })
     </script>
+
+    <audio id="lobby_music" src="/lobby/lobby_music" loop></audio>
 </body>
 
 </html>
