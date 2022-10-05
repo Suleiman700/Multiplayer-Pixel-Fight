@@ -136,7 +136,7 @@ function init() {
                 if (canJump === true) {
                     canJump = false;
                     velocity.y += 180;
-                    var audio = new Audio('/movements/jumps/cartoon_jump');
+                    var audio = new Audio(AUDIO_jump_sound.src);
                     // var audio = new Audio('/movements/jumps/cartoon_jump');
                     audio.volume = 0.1
                     audio.play();
@@ -734,9 +734,14 @@ socket.on("play bullet hit sound", () => {
 socket.on("play bullet sound", function (shooter_pos) {
     // console.log(shooter_pos)
 
+    // var audio = new Audio('client/bullet.mp3');
+    // audio.volume = 0.7
+    // audio.play();
+    // return
+
     {
         // Create cube
-        const cubeGeo1 = new THREE.BoxGeometry(5, 5, 5);
+        const cubeGeo1 = new THREE.BoxGeometry(0.01, 0.01, 0.01);
         const cubeMat1 = new THREE.MeshLambertMaterial({color: 0xFFFFFF})
         const cube = new THREE.Mesh(cubeGeo1, cubeMat1)
 
@@ -749,6 +754,10 @@ socket.on("play bullet sound", function (shooter_pos) {
 
         // Get audio
         const bullet_sound = new THREE.PositionalAudio(listener)
+
+        // var audio = new Audio(AUDIO_bullet_sound.src);
+
+        // const loader = new THREE.AudioLoader().load(audio.src, (buffer) => {
         const loader = new THREE.AudioLoader().load('/bullet_sound', (buffer) => {
             bullet_sound.setBuffer(buffer)
             bullet_sound.setLoop(false)
